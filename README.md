@@ -1,3 +1,5 @@
+## BU Python Login ##
+
 This is a script to login to any BU site that uses Shibboleth. To use:  
 
 1. Create User object, passing in username and password.
