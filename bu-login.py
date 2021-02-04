@@ -72,14 +72,14 @@ class Accommodate:
                 prof_name = soup.find('span', text=re.compile('Dear')).text.replace("Dear ", "").replace(":",
                                                                                                          "").split()
                 print(prof_name)
-                # pdf = self.session.get('https://bu-accommodate.symplicity.com/students/index.php?generate_pdf=1')
-                # with open(prof_name[0] + prof_name[1] + '.pdf', 'wb') as f:
-                #     f.write(pdf.content)
-                # if include_letter:
-                #     with open(prof_name[0] + prof_name[1] + '.txt', 'w') as f:
-                #         f.write(
-                #             f"Hello {prof_name[0]} {prof_name[1]},\n\nHere is my accommodation letter for the Spring 2021 "
-                #             f"semester.\n\nThanks, \nYanni")
+                pdf = self.session.get('https://bu-accommodate.symplicity.com/students/index.php?generate_pdf=1')
+                with open(prof_name[0] + prof_name[1] + '.pdf', 'wb') as f:
+                    f.write(pdf.content)
+                if include_letter:
+                    with open(prof_name[0] + prof_name[1] + '.txt', 'w') as f:
+                        f.write(
+                            f"Hello {prof_name[0]} {prof_name[1]},\n\nHere is my accommodation letter for the Spring 2021 "
+                            f"semester.\n\nThanks, \nYanni")
             i += 1
             if next_link is None:
                 break
