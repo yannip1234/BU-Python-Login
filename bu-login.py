@@ -34,12 +34,14 @@ class User:
 class Accommodate:
     def __init__(self, session):
         self.session = session
+        self.professors = []
+        self.pages = 0
 
     def download_letters(self, include_letter, year):
         last_url = 'https://bu-accommodate.symplicity.com/students/index.php?s=accessibility_request&mode=form&tab=letter&ss=letter'
-        i = 1
+        self.pages = 1
         while True:
-            print(f'Page: {i}')
+            # print(f'Page: {i}')
             s = self.session.get(last_url)
             soup = BeautifulSoup(s.text, 'html.parser')
             try:
@@ -71,7 +73,7 @@ class Accommodate:
                 soup = BeautifulSoup(letter_load.text, 'html.parser')
                 prof_name = soup.find('span', text=re.compile('Dear')).text.replace("Dear ", "").replace(":",
                                                                                                          "").split()
-                print(prof_name)
+                self.professors.append(prof_name)
                 pdf = self.session.get('https://bu-accommodate.symplicity.com/students/index.php?generate_pdf=1')
                 with open(prof_name[0] + prof_name[1] + '.pdf', 'wb') as f:
                     f.write(pdf.content)
@@ -80,15 +82,20 @@ class Accommodate:
                         f.write(
                             f"Hello {prof_name[0]} {prof_name[1]},\n\nHere is my accommodation letter for the Spring 2021 "
                             f"semester.\n\nThanks, \nYanni")
-            i += 1
+
             if next_link is None:
                 break
 
+            self.pages += 1
+
 
 def main():
-    user = User('USERNAME', 'PASSWORD!')
+    user = User('USERNAME', 'PASSWORD')
     session = user.login('https://c222-shib.symplicity.com/sso/')
-    Accommodate(session).download_letters(False, "all")
+    ac = Accommodate(session)
+    ac.download_letters(False, "all")
+    print(ac.professors)
+    print(ac.pages)
 
 
 if __name__ == "__main__":
